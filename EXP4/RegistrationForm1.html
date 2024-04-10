@@ -1,0 +1,84 @@
+import React, { useState } from 'react';
+function RegistrationForm() {
+ const [formData, setFormData] = useState({
+ username: '',
+ email: '',
+ password: '',
+ confirmPassword: ''});
+ const [errors, setErrors] = useState({});
+ const handleChange = (e) => {
+ const { name, value } = e.target;
+setFormData(prevState => ({
+ ...prevState,
+ [name]: value})); };
+const handleSubmit = (e) => {
+ e.preventDefault();
+ const errors = validateForm(formData);
+ if (Object.keys(errors).length === 0) {
+ console.log("Form submitted:", formData);
+ } else {
+ setErrors(errors);}};
+const validateForm = (formData) => {
+ let errors = {};
+ if (!formData.username) {
+ errors.username = 'Username is required';}
+ if (!formData.email) {
+ errors.email = 'Email is required';
+ } else if (!isValidEmail(formData.email)) {
+ errors.email = 'Invalid email format';}
+ if (!formData.password) {
+ errors.password = 'Password is required';
+ } else if (formData.password.length < 6) {
+ errors.password = 'Password must be at least 6 characters long';}
+ if (!formData.confirmPassword) {
+ errors.confirmPassword = 'Confirm Password is required';
+ } else if (formData.password !== formData.confirmPassword) {
+ errors.confirmPassword = 'Passwords do not match';}
+ return errors;};
+const isValidEmail = (email) => {
+const regex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+ return regex.test(email);};
+return (
+ <div className="registration-form-container"> {/* Apply container class */}
+ <div className="registration-form"> {/* Apply form container class */}
+ <h2>Registration Form</h2>
+ <form onSubmit={handleSubmit}>
+ <div>
+ <label>Username:</label>
+ <input
+ type="text"
+ name="username"
+ value={formData.username}
+ onChange={handleChange}/>
+ {errors.username && <span className="error">{errors.username}</span>}
+ </div>
+ <div>
+ <label>Email:</label>
+ <input
+ type="email"
+ name="email"
+ value={formData.email}
+ onChange={handleChange}/>
+ {errors.email && <span className="error">{errors.email}</span>}
+ </div>
+ <div>
+ <label>Password:</label>
+ <inputtype="password"
+ name="password"
+ value={formData.password}
+ onChange={handleChange}/>
+ {errors.password && <span className="error">{errors.password}</span>}
+ </div>
+ <div>
+ <label>Confirm Password:</label>
+ <input type="password"
+ name="confirmPassword"
+ value={formData.confirmPassword}
+ onChange={handleChange}/>
+ {errors.confirmPassword && <span className="error">{errors.confirmPassword}</span>}
+ </div>
+ <button type="submit">Register</button>
+ </form>
+ </div>
+ </div>);}
+export default RegistrationForm;

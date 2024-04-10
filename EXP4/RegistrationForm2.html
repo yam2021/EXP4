@@ -1,0 +1,75 @@
+import React, { useState } from 'react';
+function RegistrationForm() {
+ const [username, setUsername] = useState('');
+ const [email, setEmail] = useState('');
+ const [password, setPassword] = useState('');
+ const [confirmPassword, setConfirmPassword] = useState('');
+ const [gender, setGender] = useState('');
+ const [dob, setDob] = useState('');
+ const [phone, setPhone] = useState('');
+const [subscription, setSubscription] = useState(false);
+ const [error, setError] = useState('');
+ const [successModalVisible, setSuccessModalVisible] = useState(false);
+ const validateRegistrationForm = () => {
+ if (!username || !email || !password || !confirmPassword || !gender || !dob || !phone || !subscription) {
+ setError('All fields are required.');
+ return false; }
+ if (!isValidEmail(email)) {
+ setError('Enter a valid email address.');
+ return false;}
+ if (!isValidPassword(password)) {
+ setError('Password must be at least 6 characters long and include both letters and numbers.');
+ return false; }
+ setError('');
+ setSuccessModalVisible(true);
+ return false;};
+ const isValidEmail = (email) => {
+ const regex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+ return regex.test(email);};
+ const isValidPassword = (password) => {
+ const regex = /^(?=.[a-zA-Z])(?=.*\d).{6,}$/;
+ return regex.test(password);};
+ const closeModal = () => {
+ setSuccessModalVisible(false);};
+ return (
+ <div>
+ <form onSubmit={validateRegistrationForm}>
+ <label htmlFor="username">Username:</label>
+<input type="text" id="username" name="username" value={username} onChange={(e) => 
+setUsername(e.target.value)} required minLength={3} maxLength={20} />
+ <label htmlFor="email">Email:</label>
+ <input type="email" id="email" name="email" value={email} onChange={(e) => setEmail(e.target.value)} required />
+ <label htmlFor="password">Password:</label>
+ <input type="password" id="password" name="password" value={password} onChange={(e) => 
+setPassword(e.target.value)} required minLength={6} />
+ <label htmlFor="confirmPassword">Confirm Password:</label>
+ <input type="password" id="confirmPassword" name="confirmPassword" value={confirmPassword} onChange={(e) 
+=> setConfirmPassword(e.target.value)} required minLength={6} />
+ <label htmlFor="gender">Gender:</label>
+ <select id="gender" name="gender" value={gender} onChange={(e) => setGender(e.target.value)} required>
+ <option value="">Select</option>
+ <option value="male">Male</option>
+ <option value="female">Female</option>
+ <option value="other">Other</option>
+ </select>
+ <label htmlFor="dob">Date of Birth:</label>
+ <input type="date" id="dob" name="dob" value={dob} onChange={(e) => setDob(e.target.value)} required />
+ <label htmlFor="phone">Phone Number:</label>
+ <input type="tel" id="phone" name="phone" value={phone} onChange={(e) => setPhone(e.target.value)} 
+pattern="[0-9]{10}" required placeholder="e.g., 1234567890" />
+ <label htmlFor="subscription">Terms and conditions:</label>
+ <input type="checkbox" id="subscription" name="subscription" checked={subscription} onChange={(e) => 
+setSubscription(e.target.checked)} required />
+ <div className="error-message">{error}</div>
+ <input type="submit" value="Register" />
+ </form>
+ {successModalVisible && (
+ <div className="modal-wrapper">
+<div className="modal">
+ <p>Registration successful!</p>
+ <span className="close" onClick={closeModal}>&times;</span>
+ </div>
+ </div>)}
+ </div>
+ );}
+  export default RegistrationForm;
